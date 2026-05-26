@@ -1,0 +1,9 @@
+Given this data:
+```json
+{data[v2_rounded_3]}
+```
+
+Answer the following question by selecting the correct answer and outputting it word-for-word inside of an answer tag without outputting anything else, like this: "<answer>X) lorem ipsum</answer>".
+```text
+{text}
+```

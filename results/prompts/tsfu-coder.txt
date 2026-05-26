@@ -1,0 +1,18 @@
+You are given the following question:
+```
+{text}
+```
+
+Your goal is to answer this question. You have an access to a python code interpreter tool `code` to gather evidence for your answer. The tool `code` takes a single argument "code" of type string. You may use the tool multiple times. Gather evidence first before answering. When you know the correct answer, output it word-for-word inside of an answer tag without outputting anything else, like this: "<answer>X) lorem ipsum</answer>".
+
+When using the code tool, the code should contain a single method `main` taking a single parameter `df` of type `pd.DataFrame`. The dataframe `df` contains the following keys: {data[ts_keys]}. The column 'time' is of type `pd.Timestamp`. The remaining columns are of type `float`. The dataframe `df` contains the time series data for the question. The python version is 3.9. The libraries available are "pandas==2.2.3", "numpy==1.26.4", "scipy==1.14.1", and "statsmodels==0.14.5".
+
+Here is an example `code` start:
+
+{"code": "import pandas as pd
+import numpy as np
+
+def main(df: pd.DataFrame):
+    # `df`  is a dataframe containing the following columns: {data[ts_keys]}.
+    # The column 'time' is of type `pd.Timestamp`.    # The remaining columns are of type `float`.
+    (...)"}

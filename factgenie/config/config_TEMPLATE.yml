@@ -1,0 +1,29 @@
+---
+login:
+  # require user login for all pages except the page for human annotators
+  active: false
+  # if set to `false`, the Browse and Analyze pages will not require login even when login is active (useful for publishing results)
+  lock_view_pages: true
+  # !!! change the default values !!!
+  username: admin
+  password: factgenie
+logging:
+  # accepts values from the logging module: https://docs.python.org/3/library/logging.html#logging-levels
+  level: INFO
+  # printing extra Flask debug logs
+  flask_debug: false
+# set e.g. to "/demo/factgenie" if your app is running behind a reverse proxy on https://your-server.com/demo/factgenie
+host_prefix: ""
+# API keys: set the keys for the services you will be using
+api_keys:
+  OLLAMA_API_KEY: ''
+  # https://docs.litellm.ai/docs/providers/anthropic
+  ANTHROPIC_API_KEY: ''
+  # https://docs.litellm.ai/docs/providers/gemini
+  GEMINI_API_KEY: ''
+  # https://docs.litellm.ai/docs/providers/openai
+  OPENAI_API_KEY: ''
+  # https://docs.litellm.ai/docs/providers/vertex
+  VERTEXAI_LOCATION: ''
+  VERTEXAI_PROJECT: ''
+  VERTEXAI_JSON_FULL_PATH: ''

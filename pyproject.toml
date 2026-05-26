@@ -1,0 +1,117 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "factgenie"
+version = "1.1.0"
+requires-python = ">=3.11"
+description = "Lightweight self-hosted span annotation tool"
+readme = "README.md"
+license = "MIT"
+authors = [
+  { name = "Zdenek Kasner", email = "kasner@ufal.mff.cuni.cz" },
+  { name = "Ondrej Platek" },
+  { name = "Patricia Schmidtova" },
+  { name = "Dave Howcroft" },
+  { name = "Ondrej Dusek" },
+]
+dependencies = [
+  "coloredlogs>=15.0.1",
+  "datasets>=2.9.0",
+  "Flask-SSE>=1.0.0",
+  "Flask>=2.2.2",
+  "flask_apscheduler>=1.12.4",
+  "json2table>=1.1.5",
+  "lxml>=5.3.0",
+  "Markdown>=3.7.0",
+  "natsort>=8.4.0",
+  "python-slugify>=8.0.4",
+  "PyYAML>=6.0.2",
+  "requests>=2.32.3",
+  "scipy>=1.14.1",
+  "tinyhtml>=1.2.0",
+  "litellm>=1.70.0",
+  "pydantic>=2.10.6",
+  "google-api-python-client>=2.16.0",
+  "google-cloud-aiplatform>=1.38",
+  "pygamma-agreement==0.5.9",
+  "matplotlib>=3.10.0",
+  "tabulate>=0.9.0",
+  "tenacity>=9.0.0",
+  "llm-sandbox>=0.3.12",
+  "fast-edit-distance>=1.2.2",
+  "sqlalchemy>=2.0.50",
+  "docker>=7.1.0",
+  "plotly>=6.7.0",
+  "botocore>=1.43.14",
+  "textual>=8.2.7",
+  "orjson>=3.11.9",
+  "pyperclip>=1.11.0",
+  "transformers>=5.9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ufal/factgenie"
+
+[project.scripts]
+factgenie = "factgenie.bin.run:run"
+
+[project.entry-points."flask.commands"]
+create_llm_campaign = "factgenie.bin.run:create_llm_campaign"
+run_llm_campaign = "factgenie.bin.run:run_llm_campaign"
+list = "factgenie.bin.run:list_data"
+info = "factgenie.bin.run:info"
+
+[project.optional-dependencies]
+dev = [
+  "wheel>=0.44.0",
+  "ipdb",
+  "black==24.10.0",
+  "isort==5.13.2",
+]
+test = [
+  "pytest>=8.3.3",
+]
+deploy = [
+  "gunicorn>=23.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["factgenie*"]
+exclude = ["test", "test.*"]
+
+[tool.setuptools.package-data]
+factgenie = [
+  "config/default_prompts.yml",
+  "config/resources.yml",
+  "config/config_TEMPLATE.yml",
+  "config/**/example-*.yaml",
+  "data/datasets_TEMPLATE.yml",
+  "static/**/*",
+  "templates/**/*",
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+force-exclude = '''
+/(
+    \.git
+  | \.github
+)/
+'''
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+  "ignore:The get_cmap function was deprecated:matplotlib.MatplotlibDeprecationWarning",
+  "ignore:Support for class-based `config` is deprecated:DeprecationWarning:pydantic\\._internal\\._config",
+  "ignore:Valid config keys have changed in V2:UserWarning:pydantic\\._internal\\._config",
+]
+
+[tool.uv]
+package = true

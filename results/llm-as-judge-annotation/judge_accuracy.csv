@@ -1,0 +1,6 @@
+,model,accuracy
+0,gpt-5.4-mini-2026-03-17,0.8928571428571428
+1,qwen3-next-two-phase,0.8809523809523809
+2,gpt-oss-120b-nosysmsg,0.8928571428571428
+3,gpt-oss-120b-sysmsg,0.9027777777777778
+4,qwen3-next-single-phase,0.8650793650793651

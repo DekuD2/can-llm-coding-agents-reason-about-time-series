@@ -52,7 +52,7 @@ def load(dir: Path, path: str):
 
     dataset_eval = DatasetEval(ds_info, [evaluator], dataset_items)
 
-    data = dir / "adding-correctness" / "data"
+    data = dir / "adding-correctness"
     split = dataset_eval.info.split.replace("final-", "")
     outputs_file = data / f"{split}.jsonl"
     answers_file = data / f"answers-{split.split('-')[0]}.jsonl"

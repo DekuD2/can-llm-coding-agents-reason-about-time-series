@@ -850,7 +850,7 @@ def update_path(args, arg_name):
                 print(f"Too many options in '{path}'.")
                 for f in files:
                     print(f" - '{str(f)}'")
-                raise ArgumentError("Too many options in '{path}'.")
+                raise ArgumentError(f"Too many options in '{path}'.")
 
     setattr(args, arg_name, path)
     if str(orig_val) != str(path):

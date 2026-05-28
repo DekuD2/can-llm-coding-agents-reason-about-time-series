@@ -1,0 +1,1 @@
+vllm serve openai/gpt-oss-120b --host 0.0.0.0 --port $VLLM_PORT --api-key fake-api-key --enable-auto-tool-choice --tool-call-parser openai --max-num-seqs 4 --gpu-memory-utilization 0.85 --tensor-parallel-size $N_GPUS

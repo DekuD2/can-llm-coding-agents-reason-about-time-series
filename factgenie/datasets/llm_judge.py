@@ -21,40 +21,9 @@ from factgenie.datasets.utils import extract_conversation, tree
 
 
 file_names = {
-    "tse-hybrid": "tse-hybrid-minimal.jsonl",
-    "tse-tools": "tse-tools.jsonl",
-    "tse-raw": "tse-raw.jsonl",
-    "tsfu-hybrid": "tsfu-hybrid-minimal.jsonl",
-    "tsfu-raw": "tsfu-raw.jsonl",
-    # Final:
-    "final-tse-gpt-oss-coder": "final/tse-gpt-oss-coder-th30k.jsonl",
-    "final-tse-gpt-oss-direct": "final/tse-gpt-oss-direct-th30k.jsonl",
-    "final-tse-gpt-oss-hybrid": "final/tse-gpt-oss-hybrid-th30k.jsonl",
-    "final-tse-qwen-coder": "final/tse-qwen-coder-th82k-cot.jsonl",
-    "final-tse-qwen-direct": "final/tse-qwen-direct-th82k-cot.jsonl",
-    "final-tse-qwen-hybrid": "final/tse-qwen-hybrid-th82k-cot.jsonl",
-    "final-tsfu-gpt-oss-coder": "final/tsfu-gpt-oss-coder.jsonl",
-    "final-tsfu-gpt-oss-direct": "final/tsfu-gpt-oss-direct.jsonl",
-    "final-tsfu-gpt-oss-hybrid": "final/tsfu-gpt-oss-hybrid.jsonl",
 }
 
-
 answer_files = {
-    "tse-hybrid": "answers-tse-test.jsonl",
-    "tse-tools": "answers-tse-test.jsonl",
-    "tse-raw": "answers-tse-test.jsonl",
-    "tsfu-hybrid": "answers-tsfu-test.jsonl",
-    "tsfu-raw": "answers-tsfu-test.jsonl",
-    # Final:
-    "final-tse-gpt-oss-coder": "final/answers-tse.jsonl",
-    "final-tse-gpt-oss-direct": "final/answers-tse.jsonl",
-    "final-tse-gpt-oss-hybrid": "final/answers-tse.jsonl",
-    "final-tse-qwen-coder": "final/answers-tse.jsonl",
-    "final-tse-qwen-direct": "final/answers-tse.jsonl",
-    "final-tse-qwen-hybrid": "final/answers-tse.jsonl",
-    "final-tsfu-gpt-oss-coder": "final/answers-tsfu.jsonl",
-    "final-tsfu-gpt-oss-direct": "final/answers-tsfu.jsonl",
-    "final-tsfu-gpt-oss-hybrid": "final/answers-tsfu.jsonl",
 }
 
 
@@ -78,6 +47,17 @@ class LLMJudgeDataset(Dataset):
         data_path = Path(data_path)
         file = data_path / file_names.get(split, f"{split}.jsonl")
         answer_file = data_path / answer_files.get(split, f"{split}-answers.jsonl")
+
+        if not answer_file.exists():
+            with file.open() as f:
+                first_line = next(iter(f.readlines()))
+                j = json.loads(first_line)
+                j_split = j["split"]
+                j_ds = j["dataset"]
+                if "exam" in j_ds:
+                    answer_file = data_path / f"answers-tse-{j_split}.jsonl"
+                else:
+                    answer_file = data_path / f"answers-tsfu-{j_split}.jsonl"
         logger.info(f"answers file: {answer_file}")
         assert answer_file.exists(), f"Answers file {answer_file} doesn't exist!"
         idx = 0

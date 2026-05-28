@@ -338,9 +338,9 @@ class CodingLoop(t.Transform):
     def __call__(self, current: list[dict], api: ModelAPI) -> list[dict]:
         return t.derive_field(current, api, self.evaluate_loop, self.output_field)
 
-class McpCodingLoop(t.Transform):
-    FIELD_CODE_INPUT = "MCP_LOOP:CODE_INPUT"
-    FIELD_CODE_OUTPUT = "MCP_LOOP:CODE_INPUT"
+class AgenticCodingLoop(t.Transform):
+    FIELD_CODE_INPUT = "CODING_LOOP:CODE_INPUT"
+    FIELD_CODE_OUTPUT = "CODING_LOOP:CODE_INPUT"
 
     # Not doing so would result in several problems:
     #  - Using arbitrary fields -> big confusion on the side of the user. It becomes like alchemy having to guess what the params should be (or having to read the code to understand the point, which is very complicated).
@@ -401,7 +401,7 @@ class McpCodingLoop(t.Transform):
         # "Answer me this question, you have tools available".
         # -> <conversation>
 
-        # [McpLoop]
+        # [AgentLoop]
         # The purpose of this transform is to "assist" the LLM by performing its tools until it converges.
         # <conversation> -> extract code call -> <code> -> interpret code -> <result> -> insert tool reply
         # ...
@@ -422,7 +422,7 @@ class McpCodingLoop(t.Transform):
     def outputs_fields(self) -> list[str]:
         return []
 
-    def mcp_loop(self, c: dict, api: ModelAPI):
+    def tool_loop(self, c: dict, api: ModelAPI):
         # The loop:
         #   1. Got conversation as input
         #     2. Conversation got tool call? ◄──┐
@@ -464,8 +464,8 @@ class McpCodingLoop(t.Transform):
             assert tc[TYPE] == FUNCTION
 
             func = tc[FUNCTION]
-            # logger.warning("START OF MCP PARSING")
-            logger.warning(f"[debug][mcp tool] {func[NAME]}:, {tc}")
+            # logger.warning("START OF TOOL PARSING")
+            logger.warning(f"[debug][coding tool] {func[NAME]}:, {tc}")
 
             # assert func[NAME] == self.function_name
 
@@ -492,11 +492,11 @@ class McpCodingLoop(t.Transform):
                 if iters == self.max_iters:
                     self.tool_reply.completion_kwargs = {}  # Forget tools.
                     c[self.FIELD_CODE_OUTPUT] += "\n\n[MESSAGE]\n\nMaximum number of tool calls reached. Please submit your answer now."
-                    # logger.warning("MCP warns: Maximum number of tool calls reached. Please submit your answer now.")
+                    # logger.warning("TOOL warns: Maximum number of tool calls reached. Please submit your answer now.")
 
                 c = self.tool_reply([c], api)[0]
             except Exception as e:
-                logger.error(f"MCP code loop error '{e}'")
+                logger.error(f"Code loop error '{e}'")
                 raise e
 
         if interactive_session:
@@ -505,12 +505,12 @@ class McpCodingLoop(t.Transform):
         return c[self.conversation_field]
 
     def __call__(self, current: list[dict], api: ModelAPI) -> list[dict]:
-        return t.derive_field(current, api, self.mcp_loop, self.conversation_field)
+        return t.derive_field(current, api, self.tool_loop, self.conversation_field)
 
 
 class CustomToolLoop(t.Transform):
-    FIELD_CODE_INPUT = "MCP_LOOP:CODE_INPUT"
-    FIELD_CODE_OUTPUT = "MCP_LOOP:CODE_INPUT"
+    FIELD_CODE_INPUT = "CODING_LOOP:CODE_INPUT"
+    FIELD_CODE_OUTPUT = "CODING_LOOP:CODE_INPUT"
 
     # Not doing so would result in several problems:
     #  - Using arbitrary fields -> big confusion on the side of the user. It becomes like alchemy having to guess what the params should be (or having to read the code to understand the point, which is very complicated).
@@ -540,7 +540,7 @@ class CustomToolLoop(t.Transform):
         # "Answer me this question, you have tools available".
         # -> <conversation>
 
-        # [McpLoop]
+        # [ToolLoop]
         # The purpose of this transform is to "assist" the LLM by performing its tools until it converges.
         # <conversation> -> extract code call -> <code> -> interpret code -> <result> -> insert tool reply
         # ...
@@ -558,7 +558,7 @@ class CustomToolLoop(t.Transform):
     def outputs_fields(self) -> list[str]:
         return []
 
-    def mcp_loop(self, c: dict, api: ModelAPI):
+    def tool_loop(self, c: dict, api: ModelAPI):
         # The loop:
         #   1. Got conversation as input
         #     2. Conversation got tool call? ◄──┐
@@ -608,7 +608,7 @@ class CustomToolLoop(t.Transform):
             #     raise ValueError(f"Unexpected answer {conv_last.content}. Expected it to begin with 'PYTHON' or 'ANSWER'.")
 
     def __call__(self, current: list[dict], api: ModelAPI) -> list[dict]:
-        return t.derive_field(current, api, self.mcp_loop, self.conversation_field)
+        return t.derive_field(current, api, self.tool_loop, self.conversation_field)
 
 
 class RangeModel(BaseModel):

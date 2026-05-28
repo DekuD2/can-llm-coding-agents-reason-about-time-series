@@ -1,0 +1,1 @@
+vllm serve Qwen/Qwen3-Next-80B-A3B-Thinking-FP8 --host 0.0.0.0 --port $VLLM_PORT --api-key fake-api-key --enable-auto-tool-choice --tool-call-parser hermes --max_model_len 196000 --served-model-name qwen3-next --gpu-memory-utilization 0.94 --tensor-parallel-size $N_GPUS --max-num-seqs 4

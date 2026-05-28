@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 from factgenie.annotations import AnnotationModelFactory
 from factgenie.prompting import transforms as t
-from factgenie.prompting.experimental_transforms import CustomToolLoop, McpCodingLoop, ParseRanges, PassData, CallSpec, InterpretCode, Edit, CodingLoop
+from factgenie.prompting.experimental_transforms import CustomToolLoop, AgenticCodingLoop, ParseRanges, PassData, CallSpec, InterpretCode, Edit, CodingLoop
 from factgenie.prompting.strategies import SequentialStrategy, register_llm_eval, register_llm_gen
 from factgenie.prompting.text_processing import get_template_sections
 
@@ -164,17 +164,16 @@ with open({{PATH}}, "r") as f:
                 ],
             )
 
-
-        mcp_loop = McpCodingLoop(
+        coding_loop = AgenticCodingLoop(
             CONVERSATION,
             interpret_code=InterpretCode(
-                McpCodingLoop.FIELD_CODE_INPUT,
-                McpCodingLoop.FIELD_CODE_OUTPUT,
+                AgenticCodingLoop.FIELD_CODE_INPUT,
+                AgenticCodingLoop.FIELD_CODE_OUTPUT,
                 call_spec,
                 log_code=True
             ),
             tool_reply=t.ConverseLLM(
-                McpCodingLoop.FIELD_CODE_OUTPUT,
+                AgenticCodingLoop.FIELD_CODE_OUTPUT,
                 CONVERSATION,
                 is_tool_reply=True,
                 extractors=t.ConverseLLM.EXTRACTORS_LOG_THINKING,
@@ -196,7 +195,7 @@ with open({{PATH}}, "r") as f:
                 QUESTION,
                 CONVERSATION,
                 system_msg=system_msg,
-                completion_kwargs=mcp_loop.completion_kwargs,
+                completion_kwargs=coding_loop.completion_kwargs,
                 extractors=t.ConverseLLM.EXTRACTORS_LOG_THINKING,
                 ensure_completion=True,
                 out_of_time_message=out_of_time_message,
@@ -232,7 +231,7 @@ with open({{PATH}}, "r") as f:
 
         return [
             *ask_question,
-            mcp_loop,
+            coding_loop,
             *select_option,
             t.Metadata(fields=[CONVERSATION]),
         ]

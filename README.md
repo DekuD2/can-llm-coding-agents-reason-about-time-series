@@ -6,7 +6,9 @@ All result files are stored in `./results`, with individual directories containi
 
 # Replicating Experiments
 
-*Prerequisites:* Have VLLM running using one of the configs from `./results/vllm-config`. You will likely want to run the LLM on a cluster and SSH tunnel the localhost:11501 port to it.
+*Prerequisites:*
+- Install and activate the python environment using uv by running `uv sync; source .venv/bin/activate` or using the attached nix flake.
+- Have VLLM running using one of the configs from `./results/vllm-config`. You will likely want to run the LLM on a cluster and SSH tunnel the localhost:11501 port to it.
 
 ## Obtaining the model outputs
 

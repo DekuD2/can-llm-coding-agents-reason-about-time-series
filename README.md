@@ -1,16 +1,19 @@
-# Project Structure
+# Can LLM Coding Agents Reason About Time Series?
+This repository is for the paper "Can LLM Coding Agents Reason About Time Series?". It contains the experiment results as well as the code to replicate these results.
 
-General Factgenie README is located in `./factgenie`. The directory itself contains a fork of factgenie adding code to allow the usage of coding LLM agents.
+## Project Structure
+
+General Factgenie README is located in `./factgenie`. The directory itself contains a fork of factgenie, extending the project to allow the usage of coding LLM agents.
 
 All result files are stored in `./results`, with individual directories containing relevant README files. All scripts for processing of these results are also located there.
 
-# Replicating Experiments
+## Replicating Experiments
 
 *Prerequisites:*
 - Install and activate the python environment using uv by running `uv sync; source .venv/bin/activate` or using the attached nix flake.
 - Have VLLM running using one of the configs from `./results/vllm-config`. You will likely want to run the LLM on a cluster and SSH tunnel the localhost:11501 port to it.
 
-## Obtaining the model outputs
+### Obtaining the model outputs
 
 1. Run factgenie:
   ```sh
@@ -23,7 +26,7 @@ All result files are stored in `./results`, with individual directories containi
 6. Select the dataset to run the experiment against in the next tab.
 7. Run either in the browser or in terminal using `factgenie run_llm_campaign <your-campaign-name>`.
 
-## Obtaining the judge outputs
+### Obtaining the judge outputs
 
 Before starting, you will need model outputs. You can use the provided ones or generate your own by following the steps from "Obtaining the model outputs".
 

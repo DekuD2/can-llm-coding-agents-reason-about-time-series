@@ -1,5 +1,5 @@
 {
-  description = "Deep Learning (npfl138).";
+  description = "Development flake for the paper 'Can LLM Coding Agents Reason About Time Series?'";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
